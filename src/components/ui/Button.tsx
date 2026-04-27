@@ -11,22 +11,37 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   variant?: "primary" | "outline" | "ghost";
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
-export default function Button({ children, href, onClick, className, variant = "primary" }: ButtonProps) {
+export default function Button({ 
+  children, 
+  href, 
+  onClick, 
+  className, 
+  variant = "primary",
+  disabled,
+  type = "button"
+}: ButtonProps) {
   const baseStyles = "px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] transition-all duration-300 inline-flex items-center justify-center";
   
   const variants = {
-    primary: "bg-white text-black border border-white hover:bg-transparent hover:text-white",
-    outline: "bg-transparent text-white border border-white hover:bg-white hover:text-black",
-    ghost: "bg-transparent text-white border border-transparent hover:bg-white/10",
+    primary: "bg-white text-black border border-white hover:bg-transparent hover:text-white disabled:hover:bg-white disabled:hover:text-black",
+    outline: "bg-transparent text-white border border-white hover:bg-white hover:text-black disabled:hover:bg-transparent disabled:hover:text-white",
+    ghost: "bg-transparent text-white border border-transparent hover:bg-white/10 disabled:hover:bg-transparent",
   };
 
   const content = (
     <motion.span
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className={cn(baseStyles, variants[variant], className)}
+      whileHover={disabled ? {} : { scale: 1.05 }}
+      whileTap={disabled ? {} : { scale: 0.95 }}
+      className={cn(
+        baseStyles, 
+        variants[variant], 
+        disabled && "opacity-50 cursor-not-allowed",
+        className
+      )}
     >
       {children}
     </motion.span>
@@ -37,7 +52,12 @@ export default function Button({ children, href, onClick, className, variant = "
   }
 
   return (
-    <button onClick={onClick} className="inline-block">
+    <button 
+      onClick={onClick} 
+      className="inline-block" 
+      disabled={disabled}
+      type={type}
+    >
       {content}
     </button>
   );

@@ -117,6 +117,7 @@ export default function ContactPage() {
               className="w-full" 
               variant="outline"
               disabled={isSubmitting}
+              type="submit"
             >
               {isSubmitting ? "Sending..." : isSuccess ? "Sent Successfully" : "Send Inquiry"}
             </Button>
